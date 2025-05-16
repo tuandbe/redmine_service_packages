@@ -1,1 +1,8 @@
- 
+<%# View for editing an existing service package %>
+<h2 class="icon icon-package"><%= l(:label_service_package_edit) %></h2>
+
+<%= labelled_form_for @service_package, url: service_package_path(@service_package), method: :patch do |f| %>
+  <%= render partial: 'form', locals: { f: f } %>
+  <%= submit_tag l(:button_update) %>
+  <%= link_to l(:button_cancel), service_packages_path, class: 'icon icon-cancel' %>
+<% end %> 
