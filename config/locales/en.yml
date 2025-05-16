@@ -1,0 +1,39 @@
+# English translations for Redmine Service Packages plugin
+en:
+  # Plugin settings
+  label_setting_service_package_name_cf: "Project Custom Field for Service Package Name"
+  label_setting_service_package_name_cf_desc: "Select the 'List' type custom field used to assign a service package to a project. Its values should match the names of the service packages you create."
+  label_setting_service_package_posts_cf: "Project Custom Field for Package Post Count"
+  label_setting_service_package_posts_cf_desc: "Select the 'Integer' type custom field where the post count of the selected service package will be automatically stored."
+  label_important_note: "Important Note"
+  text_custom_field_configuration_note: "You need to create two Project Custom Fields first: one of type 'List' (e.g., named '%{service_package_name_field}') for the package name, and another of type 'Integer' (e.g., named '%{service_package_posts_field}') for the post count. Then, select them here."
+  label_service_package_name_cf_example: "Service Package"
+  label_service_package_posts_cf_example: "Posts in Package"
+
+  # Service Package model attributes and labels
+  label_service_package: "Service Package"
+  label_service_packages: "Service Packages"
+  label_service_package_new: "New Service Package"
+  label_service_package_edit: "Edit Service Package"
+  field_service_package_name: "Package Name"
+  label_service_package_name: "Package Name"
+  field_service_package_post_count: "Post Count"
+  label_service_package_post_count: "Number of Posts"
+  field_service_package_description: "Description"
+  label_service_package_description: "Description"
+
+  # Controller messages
+  error_can_not_delete_service_package: "Could not delete service package."
+
+  # Project Patch related
+  text_service_package_updated_post_count: "Service package post count updated for project: %{project_name}."
+  text_service_package_not_found_for_update: "Service package named '%{package_name}' not found. Post count not updated for project: %{project_name}."
+  text_service_package_name_cf_not_set: "Service Package Name custom field is not configured in plugin settings. Post count cannot be updated."
+  text_service_package_posts_cf_not_set: "Service Package Posts custom field is not configured in plugin settings. Post count cannot be updated."
+  text_service_package_name_value_blank: "Service Package Name is blank for project: %{project_name}. Post count not updated."
+  text_posts_cf_readonly_message: "This field is automatically updated by the Service Package selection."
+
+  # Project Module name
+  project_module_service_packages_module: "Service Packages Management"
+
+  # ... rest of the file remains unchanged ...

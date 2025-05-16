@@ -1,0 +1,36 @@
+<%# View for listing all service packages %>
+<div class="contextual">
+  <%= link_to l(:label_service_package_new), new_service_package_path, class: 'icon icon-add' if User.current.admin? %>
+</div>
+
+<h2 class="icon icon-package"><%= l(:label_service_packages) %></h2>
+
+<% if @service_packages.any? %>
+  <table class="list">
+    <thead>
+      <tr>
+        <th><%= l(:field_service_package_name) %></th>
+        <th><%= l(:field_service_package_post_count) %></th>
+        <th><%= l(:field_description) %></th>
+        <th style="width:15%"></th> <%# For action links %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @service_packages.each do |package| %>
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td><%= link_to package.name, edit_service_package_path(package) %></td>
+          <td><%= package.post_count %></td>
+          <td><%= textilizable package.description %></td>
+          <td class="buttons">
+            <%= link_to l(:button_edit), edit_service_package_path(package), class: 'icon icon-edit' %>
+            <%= delete_link service_package_path(package) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+
+<% html_title(l(:label_service_packages)) %> 

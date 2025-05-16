@@ -1,0 +1,15 @@
+<%# Shared form for creating and editing service packages %>
+<%= error_messages_for @service_package %>
+
+<div class="box tabular">
+  <p>
+    <%= f.text_field :name, required: true, label: :label_service_package_name %>
+  </p>
+  <p>
+    <%= f.number_field :post_count, required: true, label: :label_service_package_post_count, min: 0 %>
+  </p>
+  <p>
+    <%= f.text_area :description, rows: 5, class: 'wiki-edit', label: :label_service_package_description %>
+    <%= wikitoolbar_for(@service_package, :description) %>
+  </p>
+</div> 

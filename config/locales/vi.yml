@@ -1,0 +1,37 @@
+# Vietnamese translations for Redmine Service Packages plugin
+vi:
+  # Plugin settings
+  label_setting_service_package_name_cf: "Trường tùy chỉnh tên Gói dịch vụ cho Dự án"
+  label_setting_service_package_name_cf_desc: "Chọn trường tùy chỉnh kiểu 'Danh sách' được sử dụng để gán gói dịch vụ cho dự án. Các giá trị của nó phải khớp với tên các gói dịch vụ bạn tạo."
+  label_setting_service_package_posts_cf: "Trường tùy chỉnh Số bài viết theo gói cho Dự án"
+  label_setting_service_package_posts_cf_desc: "Chọn trường tùy chỉnh kiểu 'Số nguyên' nơi số lượng bài viết của gói dịch vụ đã chọn sẽ được tự động lưu trữ."
+  label_important_note: "Lưu ý quan trọng"
+  text_custom_field_configuration_note: "Bạn cần tạo hai Trường tùy chỉnh cho Dự án trước: một trường kiểu 'Danh sách' (ví dụ: đặt tên '%{service_package_name_field}') cho tên gói và một trường khác kiểu 'Số nguyên' (ví dụ: đặt tên '%{service_package_posts_field}') cho số lượng bài viết. Sau đó, chọn chúng ở đây."
+  label_service_package_name_cf_example: "Gói dịch vụ"
+  label_service_package_posts_cf_example: "Số bài trong gói"
+
+  # Service Package model attributes and labels
+  label_service_package: "Gói dịch vụ"
+  label_service_packages: "Các gói dịch vụ"
+  label_service_package_new: "Tạo gói dịch vụ mới"
+  label_service_package_edit: "Sửa gói dịch vụ"
+  field_service_package_name: "Tên gói"
+  label_service_package_name: "Tên gói"
+  field_service_package_post_count: "Số bài viết"
+  label_service_package_post_count: "Số lượng bài viết"
+  field_service_package_description: "Mô tả"
+  label_service_package_description: "Mô tả"
+
+  # Controller messages
+  error_can_not_delete_service_package: "Không thể xoá gói dịch vụ."
+
+  # Project Patch related
+  text_service_package_updated_post_count: "Đã cập nhật số bài viết theo gói dịch vụ cho dự án: %{project_name}."
+  text_service_package_not_found_for_update: "Không tìm thấy gói dịch vụ có tên '%{package_name}'. Số bài viết không được cập nhật cho dự án: %{project_name}."
+  text_service_package_name_cf_not_set: "Trường tùy chỉnh Tên gói dịch vụ chưa được cấu hình trong cài đặt plugin. Số bài viết không được cập nhật."
+  text_service_package_posts_cf_not_set: "Trường tùy chỉnh Số bài viết theo gói chưa được cấu hình trong cài đặt plugin. Số bài viết không được cập nhật."
+  text_service_package_name_value_blank: "Tên gói dịch vụ bị trống cho dự án: %{project_name}. Số bài viết không được cập nhật."
+  text_posts_cf_readonly_message: "Trường này được tự động cập nhật theo Gói dịch vụ đã chọn."
+
+  # Project Module name
+  project_module_service_packages_module: "Quản lý Gói dịch vụ" 

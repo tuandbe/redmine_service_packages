@@ -1,0 +1,42 @@
+<%# Settings partial for the Redmine Service Packages plugin %>
+<%# This form allows admins to configure which custom fields are used by the plugin %>
+
+<% 
+  # Fetch all project custom fields that are of type 'list' for service package name
+  name_custom_fields = ProjectCustomField.where(field_format: 'list').order(:name).map { |cf| [cf.name, cf.id] }
+  # Fetch all project custom fields that are of type 'int' for service package posts count
+  posts_custom_fields = ProjectCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
+%>
+
+<p>
+  <label for="settings_service_package_name_cf_id"><%= l(:label_setting_service_package_name_cf) %></label>
+  <%= select_tag(
+        'settings[service_package_name_cf_id]',
+        options_for_select(name_custom_fields, @settings['service_package_name_cf_id']&.to_i),
+        include_blank: true
+      ) 
+  %>
+  <br>
+  <em><%= l(:label_setting_service_package_name_cf_desc) %></em>
+</p>
+
+<p>
+  <label for="settings_service_package_posts_cf_id"><%= l(:label_setting_service_package_posts_cf) %></label>
+  <%= select_tag(
+        'settings[service_package_posts_cf_id]',
+        options_for_select(posts_custom_fields, @settings['service_package_posts_cf_id']&.to_i),
+        include_blank: true
+      ) 
+  %>
+  <br>
+  <em><%= l(:label_setting_service_package_posts_cf_desc) %></em>
+</p>
+
+<p>
+  <strong><%= l(:label_important_note) %>:</strong>
+  <%= textilizable(l(:text_custom_field_configuration_note, 
+        service_package_name_field: "<strong>" + l(:label_service_package_name_cf_example) + "</strong>",
+        service_package_posts_field: "<strong>" + l(:label_service_package_posts_cf_example) + "</strong>"
+      ))
+  %>
+</p> 
