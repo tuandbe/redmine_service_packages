@@ -4,7 +4,7 @@ vi:
   label_setting_service_package_name_cf: "Trường tùy chỉnh Tên Gói Dịch Vụ"
   label_setting_service_package_name_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu danh sách) được sử dụng để lưu tên gói dịch vụ."
   label_setting_service_package_posts_cf: "Trường tùy chỉnh Số Bài Viết Gói Dịch Vụ"
-  label_setting_service_package_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng bài viết của gói dịch vụ."
+  label_setting_service_package_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng bài viết của gói dịch vụ. Dùng để tính tiến độ."
   label_important_note: "Lưu ý quan trọng"
   text_custom_field_configuration_note: "Vui lòng đảm bảo bạn đã tạo các trường tùy chỉnh dự án cần thiết. Ví dụ: một trường tùy chỉnh kiểu 'danh sách' cho %{service_package_name_field} và một trường tùy chỉnh kiểu 'số nguyên' cho %{service_package_posts_field}."
   label_service_package_name_cf_example: "Gói Dịch Vụ"
@@ -38,9 +38,13 @@ vi:
 
   # New translations for Written Posts CF
   label_setting_written_posts_cf: "Trường tùy chỉnh đếm 'Số bài đã viết'"
-  label_setting_written_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng issue từ tracker đã chọn."
+  label_setting_written_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng issue từ tracker đã chọn. Dùng để tính tiến độ."
 
   # New translations for Counting Tracker ID
   label_setting_counting_tracker: "Tracker để đếm Issue"
   label_setting_counting_tracker_desc: "Chọn tracker mà các issue của nó sẽ được đếm cho trường tùy chỉnh 'Số bài đã viết'."
+
+  # New translations for Progress Status CF
+  label_setting_progress_status_cf: "Trường tùy chỉnh Trạng thái Tiến độ Dự án"
+  label_setting_progress_status_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu danh sách) cho tiến độ dự án. Các giá trị của nó (ví dụ: 'Đang chạy', 'Sắp đủ bài', 'Hoàn thành', 'Quá hạn mức') phải được cấu hình là các mục chọn (enumerations) cho trường này."
  

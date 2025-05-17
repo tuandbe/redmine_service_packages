@@ -2,10 +2,10 @@
 <%# This form allows admins to configure which custom fields are used by the plugin %>
 
 <% 
-  # Fetch all project custom fields that are of type 'list' for service package name
-  name_custom_fields = ProjectCustomField.where(field_format: 'list').order(:name).map { |cf| [cf.name, cf.id] }
+  # Fetch all project custom fields that are of type 'list' for service package name AND progress status
+  list_type_custom_fields = ProjectCustomField.where(field_format: 'list').order(:name).map { |cf| [cf.name, cf.id] }
   # Fetch all project custom fields that are of type 'int' for service package posts count AND for written posts count
-  posts_custom_fields = ProjectCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
+  int_type_custom_fields = ProjectCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
   # Fetch all trackers
   trackers = Tracker.order(:name).map { |t| [t.name, t.id] }
 %>
@@ -14,7 +14,7 @@
   <label for="settings_service_package_name_cf_id"><%= l(:label_setting_service_package_name_cf) %></label>
   <%= select_tag(
         'settings[service_package_name_cf_id]',
-        options_for_select(name_custom_fields, @settings['service_package_name_cf_id']&.to_i),
+        options_for_select(list_type_custom_fields, @settings['service_package_name_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -26,7 +26,7 @@
   <label for="settings_service_package_posts_cf_id"><%= l(:label_setting_service_package_posts_cf) %></label>
   <%= select_tag(
         'settings[service_package_posts_cf_id]',
-        options_for_select(posts_custom_fields, @settings['service_package_posts_cf_id']&.to_i),
+        options_for_select(int_type_custom_fields, @settings['service_package_posts_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -38,7 +38,7 @@
   <label for="settings_written_posts_cf_id"><%= l(:label_setting_written_posts_cf) %></label>
   <%= select_tag(
         'settings[written_posts_cf_id]',
-        options_for_select(posts_custom_fields, @settings['written_posts_cf_id']&.to_i),
+        options_for_select(int_type_custom_fields, @settings['written_posts_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -51,11 +51,23 @@
   <%= select_tag(
         'settings[counting_tracker_id]',
         options_for_select(trackers, @settings['counting_tracker_id']&.to_i),
-        include_blank: true # It's important to select a tracker
+        include_blank: true 
       ) 
   %>
   <br>
   <em><%= l(:label_setting_counting_tracker_desc) %></em>
+</p>
+
+<p>
+  <label for="settings_progress_status_cf_id"><%= l(:label_setting_progress_status_cf) %></label>
+  <%= select_tag(
+        'settings[progress_status_cf_id]',
+        options_for_select(list_type_custom_fields, @settings['progress_status_cf_id']&.to_i),
+        include_blank: true 
+      ) 
+  %>
+  <br>
+  <em><%= l(:label_setting_progress_status_cf_desc) %></em>
 </p>
 
 <p>

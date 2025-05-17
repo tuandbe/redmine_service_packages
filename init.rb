@@ -6,8 +6,8 @@ logger = Rails.logger
 Redmine::Plugin.register :redmine_service_packages do
   name 'Redmine Service Packages'
   author 'tuandbe'
-  description 'Manage service packages for projects, sync post counts, and count issues from a configurable tracker.'
-  version '0.2.3'
+  description 'Manage service packages, sync post counts, count issues from a configurable tracker, and update project progress status.'
+  version '0.2.4'
   url 'https://github.com/tuandbe/redmine_service_packages'
   author_url 'https://github.com/tuandbe'
 
@@ -17,7 +17,8 @@ Redmine::Plugin.register :redmine_service_packages do
     'service_package_name_cf_id' => nil,
     'service_package_posts_cf_id' => nil,
     'written_posts_cf_id' => nil,
-    'counting_tracker_id' => nil
+    'counting_tracker_id' => nil,
+    'progress_status_cf_id' => nil
   }, partial: 'settings/redmine_service_packages_settings'
 
   project_module :service_packages_module do

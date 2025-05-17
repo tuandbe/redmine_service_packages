@@ -4,7 +4,7 @@ en:
   label_setting_service_package_name_cf: "Service Package Name Custom Field"
   label_setting_service_package_name_cf_desc: "Select the project custom field (list type) used to store the service package name."
   label_setting_service_package_posts_cf: "Service Package Posts Custom Field"
-  label_setting_service_package_posts_cf_desc: "Select the project custom field (integer type) used to store the number of posts for the service package."
+  label_setting_service_package_posts_cf_desc: "Select the project custom field (integer type) used to store the number of posts for the service package. Used for progress calculation."
   label_important_note: "Important Note"
   text_custom_field_configuration_note: "Please ensure you have created the necessary project custom fields. For example, a 'list' type custom field for %{service_package_name_field} and an 'integer' type custom field for %{service_package_posts_field}."
   label_service_package_name_cf_example: "Service Package"
@@ -38,10 +38,14 @@ en:
 
   # New translations for Written Posts CF
   label_setting_written_posts_cf: "'Written Posts' Count Custom Field"
-  label_setting_written_posts_cf_desc: "Select the project custom field (integer type) used to store the count of issues from the selected tracker."
+  label_setting_written_posts_cf_desc: "Select the project custom field (integer type) used to store the count of issues from the selected tracker. Used for progress calculation."
 
   # New translations for Counting Tracker ID
   label_setting_counting_tracker: "Tracker for Counting Issues"
   label_setting_counting_tracker_desc: "Select the tracker whose issues will be counted for the 'Written Posts' custom field."
+
+  # New translations for Progress Status CF
+  label_setting_progress_status_cf: "Project Progress Status Custom Field"
+  label_setting_progress_status_cf_desc: "Select the project custom field (list type) for project progress. Its values (e.g., 'Đang chạy', 'Sắp đủ bài', 'Hoàn thành', 'Quá hạn mức') must be configured as enumerations for this custom field."
 
   # ... rest of the file remains unchanged ...
