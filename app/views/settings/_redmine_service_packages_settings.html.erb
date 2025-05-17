@@ -71,6 +71,13 @@
 </p>
 
 <p>
+  <label for="settings_progress_calculation_rules"><%= l(:label_setting_progress_calculation_rules) %></label><br>
+  <%= text_area_tag 'settings[progress_calculation_rules]', @settings['progress_calculation_rules'], rows: 6, class: 'wiki-edit' %>
+  <br>
+  <em><%= textilizable(l(:label_setting_progress_calculation_rules_desc)) %></em>
+</p>
+
+<p>
   <strong><%= l(:label_important_note) %>:</strong>
   <%= textilizable(l(:text_custom_field_configuration_note, 
         service_package_name_field: "<strong>" + l(:label_service_package_name_cf_example) + "</strong>",

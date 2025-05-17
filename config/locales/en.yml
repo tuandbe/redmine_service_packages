@@ -46,6 +46,23 @@ en:
 
   # New translations for Progress Status CF
   label_setting_progress_status_cf: "Project Progress Status Custom Field"
-  label_setting_progress_status_cf_desc: "Select the project custom field (list type) for project progress. Its values (e.g., 'Đang chạy', 'Sắp đủ bài', 'Hoàn thành', 'Quá hạn mức') must be configured as enumerations for this custom field."
+  label_setting_progress_status_cf_desc: "Select the project custom field (list type) for project progress. Its values must match the outcome strings in the Progress Calculation Rules."
+
+  # New translations for Progress Calculation Rules
+  label_setting_progress_calculation_rules: "Progress Calculation Rules"
+  label_setting_progress_calculation_rules_desc: |
+    Define rules to determine project progress based on the difference: (Package Posts - Written Posts).
+    Each rule on a new line. Format: [Condition]:[Progress String]
+    Conditions:
+      lt(N)  => less than N (e.g., lt(0))
+      eq(N)  => equals N (e.g., eq(0))
+      gt(N)  => greater than N (e.g., gt(2))
+      between(N1,N2) => N1 <= difference <= N2 (e.g., between(1,2))
+    Example:
+      lt(0):Overdue
+      eq(0):Completed
+      between(1,2):Nearly Done
+      gt(2):In Progress
+    The first matching rule from the top will be used. Ensure [Progress String] matches a possible value of the selected 'Project Progress Status Custom Field'.
 
   # ... rest of the file remains unchanged ...

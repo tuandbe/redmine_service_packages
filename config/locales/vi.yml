@@ -47,4 +47,21 @@ vi:
   # New translations for Progress Status CF
   label_setting_progress_status_cf: "Trường tùy chỉnh Trạng thái Tiến độ Dự án"
   label_setting_progress_status_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu danh sách) cho tiến độ dự án. Các giá trị của nó (ví dụ: 'Đang chạy', 'Sắp đủ bài', 'Hoàn thành', 'Quá hạn mức') phải được cấu hình là các mục chọn (enumerations) cho trường này."
+
+  # New translations for Progress Calculation Rules
+  label_setting_progress_calculation_rules: "Quy tắc Tính Tiến độ"
+  label_setting_progress_calculation_rules_desc: |
+    Định nghĩa các quy tắc để xác định tiến độ dự án dựa trên chênh lệch: (Số bài gói - Số bài đã viết).
+    Mỗi quy tắc trên một dòng mới. Định dạng: [Điều kiện]:[Chuỗi Tiến Độ]
+    Điều kiện:
+      lt(N)  => nhỏ hơn N (ví dụ: lt(0))
+      eq(N)  => bằng N (ví dụ: eq(0))
+      gt(N)  => lớn hơn N (ví dụ: gt(2))
+      between(N1,N2) => N1 <= chênh lệch <= N2 (ví dụ: between(1,2))
+    Ví dụ:
+      lt(0):Quá hạn mức
+      eq(0):Hoàn thành
+      between(1,2):Sắp đủ bài
+      gt(2):Đang chạy
+    Quy tắc khớp đầu tiên từ trên xuống sẽ được sử dụng. Đảm bảo [Chuỗi Tiến Độ] khớp với một giá trị có thể có của 'Trường tùy chỉnh Trạng thái Tiến độ Dự án' đã chọn.
  
