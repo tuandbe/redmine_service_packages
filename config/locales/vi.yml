@@ -1,18 +1,18 @@
 # Vietnamese translations for Redmine Service Packages plugin
 vi:
   # Plugin settings
-  label_setting_service_package_name_cf: "Trường tùy chỉnh tên Gói dịch vụ cho Dự án"
-  label_setting_service_package_name_cf_desc: "Chọn trường tùy chỉnh kiểu 'Danh sách' được sử dụng để gán gói dịch vụ cho dự án. Các giá trị của nó phải khớp với tên các gói dịch vụ bạn tạo."
-  label_setting_service_package_posts_cf: "Trường tùy chỉnh Số bài viết theo gói cho Dự án"
-  label_setting_service_package_posts_cf_desc: "Chọn trường tùy chỉnh kiểu 'Số nguyên' nơi số lượng bài viết của gói dịch vụ đã chọn sẽ được tự động lưu trữ."
+  label_setting_service_package_name_cf: "Trường tùy chỉnh Tên Gói Dịch Vụ"
+  label_setting_service_package_name_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu danh sách) được sử dụng để lưu tên gói dịch vụ."
+  label_setting_service_package_posts_cf: "Trường tùy chỉnh Số Bài Viết Gói Dịch Vụ"
+  label_setting_service_package_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng bài viết của gói dịch vụ."
   label_important_note: "Lưu ý quan trọng"
-  text_custom_field_configuration_note: "Bạn cần tạo hai Trường tùy chỉnh cho Dự án trước: một trường kiểu 'Danh sách' (ví dụ: đặt tên '%{service_package_name_field}') cho tên gói và một trường khác kiểu 'Số nguyên' (ví dụ: đặt tên '%{service_package_posts_field}') cho số lượng bài viết. Sau đó, chọn chúng ở đây."
-  label_service_package_name_cf_example: "Gói dịch vụ"
-  label_service_package_posts_cf_example: "Số bài trong gói"
+  text_custom_field_configuration_note: "Vui lòng đảm bảo bạn đã tạo các trường tùy chỉnh dự án cần thiết. Ví dụ: một trường tùy chỉnh kiểu 'danh sách' cho %{service_package_name_field} và một trường tùy chỉnh kiểu 'số nguyên' cho %{service_package_posts_field}."
+  label_service_package_name_cf_example: "Gói Dịch Vụ"
+  label_service_package_posts_cf_example: "Số lượng Bài Viết"
 
   # Service Package model attributes and labels
   label_service_package: "Gói dịch vụ"
-  label_service_packages: "Các gói dịch vụ"
+  label_service_packages: "Quản lý Gói Dịch Vụ"
   label_service_package_new: "Tạo gói dịch vụ mới"
   label_service_package_edit: "Sửa gói dịch vụ"
   field_service_package_name: "Tên gói"
@@ -34,4 +34,13 @@ vi:
   text_posts_cf_readonly_message: "Trường này được tự động cập nhật theo Gói dịch vụ đã chọn."
 
   # Project Module name
-  project_module_service_packages_module: "Quản lý Gói dịch vụ" 
+  project_module_service_packages_module: "Quản lý Gói dịch vụ"
+
+  # New translations for Written Posts CF
+  label_setting_written_posts_cf: "Trường tùy chỉnh đếm 'Số bài đã viết'"
+  label_setting_written_posts_cf_desc: "Chọn trường tùy chỉnh dự án (kiểu số nguyên) được sử dụng để lưu số lượng issue từ tracker đã chọn."
+
+  # New translations for Counting Tracker ID
+  label_setting_counting_tracker: "Tracker để đếm Issue"
+  label_setting_counting_tracker_desc: "Chọn tracker mà các issue của nó sẽ được đếm cho trường tùy chỉnh 'Số bài đã viết'."
+ 

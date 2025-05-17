@@ -1,18 +1,18 @@
 # English translations for Redmine Service Packages plugin
 en:
   # Plugin settings
-  label_setting_service_package_name_cf: "Project Custom Field for Service Package Name"
-  label_setting_service_package_name_cf_desc: "Select the 'List' type custom field used to assign a service package to a project. Its values should match the names of the service packages you create."
-  label_setting_service_package_posts_cf: "Project Custom Field for Package Post Count"
-  label_setting_service_package_posts_cf_desc: "Select the 'Integer' type custom field where the post count of the selected service package will be automatically stored."
+  label_setting_service_package_name_cf: "Service Package Name Custom Field"
+  label_setting_service_package_name_cf_desc: "Select the project custom field (list type) used to store the service package name."
+  label_setting_service_package_posts_cf: "Service Package Posts Custom Field"
+  label_setting_service_package_posts_cf_desc: "Select the project custom field (integer type) used to store the number of posts for the service package."
   label_important_note: "Important Note"
-  text_custom_field_configuration_note: "You need to create two Project Custom Fields first: one of type 'List' (e.g., named '%{service_package_name_field}') for the package name, and another of type 'Integer' (e.g., named '%{service_package_posts_field}') for the post count. Then, select them here."
+  text_custom_field_configuration_note: "Please ensure you have created the necessary project custom fields. For example, a 'list' type custom field for %{service_package_name_field} and an 'integer' type custom field for %{service_package_posts_field}."
   label_service_package_name_cf_example: "Service Package"
-  label_service_package_posts_cf_example: "Posts in Package"
+  label_service_package_posts_cf_example: "Number of Posts"
 
   # Service Package model attributes and labels
   label_service_package: "Service Package"
-  label_service_packages: "Service Packages"
+  label_service_packages: "Service Packages Management"
   label_service_package_new: "New Service Package"
   label_service_package_edit: "Edit Service Package"
   field_service_package_name: "Package Name"
@@ -35,5 +35,13 @@ en:
 
   # Project Module name
   project_module_service_packages_module: "Service Packages Management"
+
+  # New translations for Written Posts CF
+  label_setting_written_posts_cf: "'Written Posts' Count Custom Field"
+  label_setting_written_posts_cf_desc: "Select the project custom field (integer type) used to store the count of issues from the selected tracker."
+
+  # New translations for Counting Tracker ID
+  label_setting_counting_tracker: "Tracker for Counting Issues"
+  label_setting_counting_tracker_desc: "Select the tracker whose issues will be counted for the 'Written Posts' custom field."
 
   # ... rest of the file remains unchanged ...
