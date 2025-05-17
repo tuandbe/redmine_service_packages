@@ -1,0 +1,43 @@
+/* Styles for Project Progress Status Colors */
+.rsp-status-in-progress {
+  /* Neutral Gray for In Progress */
+  background-color: #f8f9fa !important; 
+  color: #212529 !important;
+  padding: 3px 5px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 1px solid #dee2e6; /* Optional: add a light border */
+}
+
+.rsp-status-nearing-completion {
+  /* Orange/Yellow */
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+  padding: 3px 5px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.rsp-status-completed {
+  /* Green for Completed */
+  background-color: #d4edda !important;
+  color: #155724 !important;
+  padding: 3px 5px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.rsp-status-over-limit {
+  /* Purple */
+  background-color: #e9d8fd !important;
+  color: #58156A !important;
+  padding: 3px 5px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* General cell styling to ensure colors are applied correctly */
+table.list td.rsp-progress-cell {
+  /* This class will be added by JS to the TD */
+  /* No specific styles needed here if children elements are styled and take up space */
+} 

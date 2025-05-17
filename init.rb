@@ -50,6 +50,14 @@ Redmine::Plugin.register :redmine_service_packages do
     logger.warn "RedmineServicePackages: Could not load general hooks_listener.rb (might be intentional). Message: #{e.message}"
   end
   
+  # Load ViewHooks for UI enhancements (e.g., progress colors)
+  begin
+    view_hooks_file = File.join(File.dirname(__FILE__), 'lib', 'redmine_service_packages', 'hooks', 'view_hooks.rb')
+    require_dependency view_hooks_file if File.exist?(view_hooks_file)
+  rescue LoadError => e
+    logger.error "RedmineServicePackages: Error loading ViewHooks. Message: #{e.message}"
+  end
+
   # Load IssueChangeHooksListener for "Số bài đã viết" feature
   begin
     issue_hooks_listener_file = File.join(File.dirname(__FILE__), 'lib', 'redmine_service_packages', 'hooks', 'issue_change_hooks_listener.rb')
