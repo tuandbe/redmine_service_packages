@@ -59,6 +59,18 @@
 </p>
 
 <p>
+  <label for="settings_social_plan_tracker_id"><%= l(:label_setting_social_plan_tracker_id) %></label>
+  <%= select_tag(
+        'settings[social_plan_tracker_id]',
+        options_for_select(trackers, @settings['social_plan_tracker_id']&.to_i),
+        include_blank: true 
+      ) 
+  %>
+  <br>
+  <em><%= l(:label_setting_social_plan_tracker_id_hint) %></em>
+</p>
+
+<p>
   <label for="settings_progress_status_cf_id"><%= l(:label_setting_progress_status_cf) %></label>
   <%= select_tag(
         'settings[progress_status_cf_id]',

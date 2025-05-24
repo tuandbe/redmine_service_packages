@@ -51,17 +51,17 @@ vi:
   # New translations for Progress Calculation Rules
   label_setting_progress_calculation_rules: "Quy tắc Tính Tiến độ"
   label_setting_progress_calculation_rules_desc: |
-    Định nghĩa các quy tắc để xác định tiến độ dự án dựa trên chênh lệch: (Số bài gói - Số bài đã viết).
-    Mỗi quy tắc trên một dòng mới. Định dạng: [Điều kiện]:[Chuỗi Tiến Độ]
-    Điều kiện:
-      lt(N)  => nhỏ hơn N (ví dụ: lt(0))
-      eq(N)  => bằng N (ví dụ: eq(0))
-      gt(N)  => lớn hơn N (ví dụ: gt(2))
-      between(N1,N2) => N1 <= chênh lệch <= N2 (ví dụ: between(1,2))
-    Ví dụ:
-      lt(0):Quá hạn mức
-      eq(0):Hoàn thành
-      between(1,2):Sắp đủ bài
-      gt(2):Đang chạy
-    Quy tắc khớp đầu tiên từ trên xuống sẽ được sử dụng. Đảm bảo [Chuỗi Tiến Độ] khớp với một giá trị có thể có của 'Trường tùy chỉnh Trạng thái Tiến độ Dự án' đã chọn.
+    Định nghĩa các quy tắc để xác định chuỗi tiến độ dựa trên chênh lệch (Tổng số bài SP - Số bài đã viết).
+    Mỗi quy tắc trên một dòng mới: <code>điều_kiện:Giá_trị</code> ví dụ: <code>eq(0):Hoàn thành</code>.<br>
+    Các điều kiện: <code>eq(số)</code>, <code>lt(số)</code>, <code>gt(số)</code>, <code>between(số1,số2)</code>.<br>
+    Ví dụ:<br>
+    <code>lt(0):Quá hạn mức</code><br>
+    <code>eq(0):Hoàn thành</code><br>
+    <code>between(1,2):Sắp đủ bài</code><br>
+    <code>gt(2):Đang chạy</code>
+  label_setting_social_plan_tracker_id: "ID Tracker cho Social Plan"
+  label_setting_social_plan_tracker_id_hint: "ID của tracker được sử dụng để xác định các issue cha 'Social Plan'."
+
+  # Quyền
+  permission_manage_service_packages: "Quản lý Gói Dịch vụ"
  

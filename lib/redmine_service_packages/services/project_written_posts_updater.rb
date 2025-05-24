@@ -15,48 +15,70 @@ module RedmineServicePackages
           return unless project.is_a?(Project)
 
           # Part 1: Update "Số bài đã viết" (Written Posts Count)
-          counting_tracker_id = Setting.plugin_redmine_service_packages['counting_tracker_id']
-          tracker = Tracker.find_by(id: counting_tracker_id) if counting_tracker_id.present?
+          counting_tracker_id_setting = Setting.plugin_redmine_service_packages['counting_tracker_id']
+          # Convert setting to integer for comparison and querying
+          counting_tracker_id = counting_tracker_id_setting.to_i 
+          
+          tracker = Tracker.find_by(id: counting_tracker_id) if counting_tracker_id > 0
           
           written_posts_cf_id = Setting.plugin_redmine_service_packages['written_posts_cf_id']
           unless written_posts_cf_id.present?
-            Rails.logger.info "[RSP] 'Written Posts Count CF ID' not configured. Project ##{project.id}."
+            Rails.logger.warn "[RSP] 'Written Posts Count CF ID' not configured. Project ##{project.id}."
             return 
           end
 
           written_posts_custom_field = ProjectCustomField.find_by(id: written_posts_cf_id)
           unless written_posts_custom_field
-            Rails.logger.warn "[RSP] ProjectCustomField for 'Written Posts' (ID #{written_posts_cf_id}) not found. Project ##{project.id}."
-            return 
+            Rails.logger.warn "[RSP] Written Posts Custom Field with ID #{written_posts_cf_id} not found. Project ##{project.id}."
+            return
           end
 
           written_posts_count = 0
-          if counting_tracker_id.present? && tracker
-            written_posts_count = project.issues.where(tracker_id: tracker.id).count
-            wp_cv = project.custom_value_for(written_posts_custom_field)
-            if wp_cv.nil?
-              if written_posts_custom_field.is_for_all? || (written_posts_custom_field.respond_to?(:project_ids) && written_posts_custom_field.project_ids.include?(project.id))
-                wp_cv = CustomValue.new(custom_field: written_posts_custom_field, customized: project)
+
+          if counting_tracker_id > 0 && tracker
+            social_plan_tracker_id_setting = Setting.plugin_redmine_service_packages['social_plan_tracker_id']
+            social_plan_tracker_id = social_plan_tracker_id_setting.to_i
+
+            unless social_plan_tracker_id > 0
+              Rails.logger.info "[RSP] 'Social Plan Tracker ID' not configured or invalid. Project ##{project.id}. Cannot determine parent Social Plan issue."
+            else
+              # Find the latest issue in the current project with tracker_id for "Social Plan", ordered by the newest start_date
+              latest_social_plan_issue = project.issues.where(tracker_id: social_plan_tracker_id).order(start_date: :desc).first
+
+              if latest_social_plan_issue
+                # Count child issues of this latest_social_plan_issue that have the configured counting_tracker_id
+                written_posts_count = Issue.where(parent_id: latest_social_plan_issue.id, tracker_id: tracker.id).count
               else
-                Rails.logger.warn "[RSP] Written Posts CF '#{written_posts_custom_field.name}' not configured for project ##{project.id}."
+                Rails.logger.info "[RSP] Project ##{project.id}: No Social Plan issue (Tracker ID: #{social_plan_tracker_id}) found. Written posts count set to 0."
               end
             end
-            if wp_cv && wp_cv.value.to_s != written_posts_count.to_s
-              wp_cv.value = written_posts_count
-              if wp_cv.save
-                Rails.logger.info "[RSP] Updated '#{written_posts_custom_field.name}' for project ##{project.id} to #{written_posts_count}."
-              else
-                Rails.logger.error "[RSP] Failed to save '#{written_posts_custom_field.name}' for project ##{project.id}: #{wp_cv.errors.full_messages.join(', ')}."
-              end
+          else
+            if !(counting_tracker_id > 0)
+              Rails.logger.info "[RSP] Project ##{project.id}: 'Tracker for Counting Issues ID' not configured. Written posts count set to 0."
+            elsif !tracker
+              Rails.logger.warn "[RSP] Project ##{project.id}: Tracker with ID #{counting_tracker_id_setting} not found. Written posts count set to 0."
             end
-          else 
-            if !counting_tracker_id.present?
-              Rails.logger.info "[RSP] 'Tracker for Counting Issues ID' not configured. Project ##{project.id}."
-            elsif !tracker 
-               Rails.logger.warn "[RSP] Tracker with ID #{counting_tracker_id} not found. Project ##{project.id}."
+          end
+
+          wp_cv = project.custom_value_for(written_posts_custom_field)
+
+          if wp_cv.nil?
+            # Check if the custom field is applicable to this project before creating a new CustomValue
+            if written_posts_custom_field.is_for_all? || written_posts_custom_field.projects.include?(project)
+              wp_cv = CustomValue.new(custom_field: written_posts_custom_field, customized: project)
+            else
+              Rails.logger.warn "[RSP] Project ##{project.id}: Written Posts CF '#{written_posts_custom_field.name}' (ID: #{written_posts_custom_field.id}) is not configured for this project. Cannot create or update value."
+              return 
             end
-            existing_wp_cv = project.custom_value_for(written_posts_custom_field)
-            written_posts_count = existing_wp_cv&.value.to_i if existing_wp_cv
+          end
+
+          if wp_cv && wp_cv.value.to_s != written_posts_count.to_s
+            wp_cv.value = written_posts_count
+            if wp_cv.save
+              Rails.logger.info "[RSP] Project ##{project.id}: Updated '#{written_posts_custom_field.name}' (ID: #{written_posts_custom_field.id}) to #{written_posts_count}."
+            else
+              Rails.logger.error "[RSP] Project ##{project.id}: Failed to save '#{written_posts_custom_field.name}' (ID: #{written_posts_custom_field.id}). Errors: #{wp_cv.errors.full_messages.join(', ')}."
+            end
           end
 
           # Part 2: Update "Tiến độ" (Progress Status)
@@ -67,7 +89,7 @@ module RedmineServicePackages
             missing_cfs = []
             missing_cfs << "'Progress Status CF ID'" unless progress_status_cf_id.present?
             missing_cfs << "'Service Package Posts CF ID'" unless service_package_posts_cf_id.present?
-            Rails.logger.info "[RSP] Required CF IDs for progress update not configured. Project ##{project.id}."
+            Rails.logger.info "[RSP] Required CF IDs for progress update not configured: #{missing_cfs.join(', ')}. Project ##{project.id}."
             return
           end
 
@@ -78,7 +100,7 @@ module RedmineServicePackages
             not_found_cfs = []
             not_found_cfs << "Progress Status CF (ID: #{progress_status_cf_id})" unless progress_custom_field
             not_found_cfs << "Service Package Posts CF (ID: #{service_package_posts_cf_id})" unless total_posts_custom_field
-            Rails.logger.warn "[RSP] Progress or Total Posts CF not found. Project ##{project.id}."
+            Rails.logger.warn "[RSP] Progress or Total Posts CF not found: #{not_found_cfs.join('; ')}. Project ##{project.id}."
             return
           end
           

@@ -51,18 +51,17 @@ en:
   # New translations for Progress Calculation Rules
   label_setting_progress_calculation_rules: "Progress Calculation Rules"
   label_setting_progress_calculation_rules_desc: |
-    Define rules to determine project progress based on the difference: (Package Posts - Written Posts).
-    Each rule on a new line. Format: [Condition]:[Progress String]
-    Conditions:
-      lt(N)  => less than N (e.g., lt(0))
-      eq(N)  => equals N (e.g., eq(0))
-      gt(N)  => greater than N (e.g., gt(2))
-      between(N1,N2) => N1 <= difference <= N2 (e.g., between(1,2))
-    Example:
-      lt(0):Overdue
-      eq(0):Completed
-      between(1,2):Nearly Done
-      gt(2):In Progress
-    The first matching rule from the top will be used. Ensure [Progress String] matches a possible value of the selected 'Project Progress Status Custom Field'.
+    Define rules to determine the progress string based on the difference (Total Service Posts - Written Posts).
+    Each rule on a new line: <code>condition:Value</code> e.g., <code>eq(0):Completed</code>.<br>
+    Conditions: <code>eq(number)</code>, <code>lt(number)</code>, <code>gt(number)</code>, <code>between(num1,num2)</code>.<br>
+    Example:<br>
+    <code>lt(0):Overdue Posts</code><br>
+    <code>eq(0):Completed</code><br>
+    <code>between(1,2):Nearly Enough</code><br>
+    <code>gt(2):In Progress</code>
+  label_setting_social_plan_tracker_id: "Social Plan Tracker ID"
+  label_setting_social_plan_tracker_id_hint: "ID of the tracker used to identify 'Social Plan' parent issues."
+
+  # Permissions
 
   # ... rest of the file remains unchanged ...

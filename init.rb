@@ -17,9 +17,10 @@ Redmine::Plugin.register :redmine_service_packages do
     'service_package_name_cf_id' => nil,
     'service_package_posts_cf_id' => nil,
     'written_posts_cf_id' => nil,
-    'counting_tracker_id' => nil,
+    'counting_tracker_id' => '12', # Bài viết
     'progress_status_cf_id' => nil,
-    'progress_calculation_rules' => "lt(0):Quá hạn mức\neq(0):Hoàn thành\nbetween(1,2):Sắp đủ bài\ngt(2):Đang chạy"
+    'progress_calculation_rules' => RedmineServicePackages::Services::ProjectWrittenPostsUpdater::DEFAULT_PROGRESS_RULES,
+    'social_plan_tracker_id' => '14' # Social Plan
   }, partial: 'settings/redmine_service_packages_settings'
 
   project_module :service_packages_module do
