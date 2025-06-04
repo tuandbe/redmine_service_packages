@@ -63,5 +63,13 @@ en:
   label_setting_social_plan_tracker_id_hint: "ID of the tracker used to identify 'Social Plan' parent issues."
 
   # Permissions
+  permission_manage_service_packages: "Manage Service Packages"
+
+  # Translations for Posting Schedule Settings - Added based on user request
+  label_posting_schedule_settings: "Posting Schedule Settings"
+  label_setting_posting_frequency_cf_id: "Posting Frequency CF ID (on Social Plan Issue)"
+  label_setting_posting_frequency_cf_id_desc: "Select the custom field (integer type) on *Issue* used to store the posting frequency (e.g., 2 for every 2 days). This field belongs to the Social Plan issue."
+  label_setting_needs_posting_today_cf_id: "'Needs Posting Today' CF ID (on Project)"
+  label_setting_needs_posting_today_cf_id_desc: "Select the custom field (boolean type) on *Project* to store whether a post is needed today."
 
   # ... rest of the file remains unchanged ...

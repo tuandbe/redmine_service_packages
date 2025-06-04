@@ -65,3 +65,10 @@ vi:
   # Quyền
   permission_manage_service_packages: "Quản lý Gói Dịch vụ"
  
+  # Translations for Posting Schedule Settings - Added based on user request
+  label_posting_schedule_settings: "Cài đặt Lịch Đăng Bài"
+  label_setting_posting_frequency_cf_id: "ID Trường Tần Suất Đăng Bài (trên Social Plan)"
+  label_setting_posting_frequency_cf_id_desc: "Chọn trường tùy chỉnh (kiểu số nguyên) trên *Issue* dùng để lưu tần suất đăng bài (ví dụ: 2 cho 2 ngày/lần). Trường này thuộc về issue Social Plan."
+  label_setting_needs_posting_today_cf_id: "ID Trường Hôm Nay Cần Đăng Bài (trên Project)"
+  label_setting_needs_posting_today_cf_id_desc: "Chọn trường tùy chỉnh (kiểu boolean) trên *Project* để lưu trạng thái Hôm nay có cần đăng bài không."
+ 

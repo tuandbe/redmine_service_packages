@@ -20,7 +20,9 @@ Redmine::Plugin.register :redmine_service_packages do
     'counting_tracker_id' => '12', # Bài viết
     'progress_status_cf_id' => nil,
     'progress_calculation_rules' => RedmineServicePackages::Services::ProjectWrittenPostsUpdater::DEFAULT_PROGRESS_RULES,
-    'social_plan_tracker_id' => '14' # Social Plan
+    'social_plan_tracker_id' => '14', # Social Plan
+    'posting_frequency_cf_id' => nil, # ID for "Tần suất đăng bài" custom field on Social Plan issue
+    'needs_posting_today_cf_id' => nil # ID for "Hôm nay cần đăng bài" custom field on Project
   }, partial: 'settings/redmine_service_packages_settings'
 
   project_module :service_packages_module do

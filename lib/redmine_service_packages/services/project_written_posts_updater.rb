@@ -48,6 +48,86 @@ module RedmineServicePackages
               if latest_social_plan_issue
                 # Count child issues of this latest_social_plan_issue that have the configured counting_tracker_id
                 written_posts_count = Issue.where(parent_id: latest_social_plan_issue.id, tracker_id: tracker.id).count
+
+                # START - New logic for "Hôm nay cần đăng bài"
+                begin
+                  # Get CF IDs from plugin settings
+                  posting_frequency_cf_id_setting = Setting.plugin_redmine_service_packages['posting_frequency_cf_id']
+                  needs_posting_today_cf_id_setting = Setting.plugin_redmine_service_packages['needs_posting_today_cf_id']
+
+                  unless posting_frequency_cf_id_setting.present? && needs_posting_today_cf_id_setting.present?
+                    missing_settings = []
+                    missing_settings << "'ID Trường Tần Suất Đăng Bài'" unless posting_frequency_cf_id_setting.present?
+                    missing_settings << "'ID Trường Hôm Nay Cần Đăng Bài'" unless needs_posting_today_cf_id_setting.present?
+                    Rails.logger.warn "[RSP] Project ##{project.id}: Các cài đặt plugin sau chưa được cấu hình: #{missing_settings.join(', ')}. Bỏ qua tính toán lịch đăng bài."
+                    return # Return from the begin block or use next if in a loop suitable for it
+                  end
+
+                  posting_frequency_cf_id = posting_frequency_cf_id_setting.to_i
+                  needs_posting_today_cf_id = needs_posting_today_cf_id_setting.to_i
+
+                  # Get "Tần suất đăng bài" value from latest_social_plan_issue
+                  posting_frequency_cf = CustomField.find_by(id: posting_frequency_cf_id)
+                  posting_frequency_value = latest_social_plan_issue.custom_value_for(posting_frequency_cf)&.value
+
+                  # Get start_date from latest_social_plan_issue
+                  plan_start_date = latest_social_plan_issue.start_date
+
+                  needs_posting_today = false # Default to false
+
+                  if posting_frequency_cf && posting_frequency_value.present? && plan_start_date.present?
+                    frequency = posting_frequency_value.to_i
+                    if frequency > 0
+                      today = Date.today
+                      if today >= plan_start_date
+                        days_diff = (today - plan_start_date).to_i
+                        needs_posting_today = (days_diff % frequency == 0)
+                      end
+                    else
+                      Rails.logger.info "[RSP] Project ##{project.id}: 'Tần suất đăng bài' (ID: #{posting_frequency_cf_id}) is zero or invalid for Social Plan ##{latest_social_plan_issue.id}."
+                    end
+                  else
+                    missing_data = []
+                    missing_data << "'Tần suất đăng bài' CF (ID: #{posting_frequency_cf_id}) not found" unless posting_frequency_cf
+                    missing_data << "'Tần suất đăng bài' value not present" if posting_frequency_value.blank?
+                    missing_data << "'start_date' not present" if plan_start_date.blank?
+                    Rails.logger.info "[RSP] Project ##{project.id}: Cannot calculate 'Hôm nay cần đăng bài'. Missing data for Social Plan ##{latest_social_plan_issue.id}: #{missing_data.join(', ')}."
+                  end
+
+                  # Update "Hôm nay cần đăng bài" custom field for the project
+                  needs_posting_today_project_cf = ProjectCustomField.find_by(id: needs_posting_today_cf_id)
+                  if needs_posting_today_project_cf
+                    if needs_posting_today_project_cf.field_format == 'bool'
+                      # Detailed logging for CF applicability check was here and is now removed.
+
+                      # We proceed if needs_posting_today_project_cf is valid and boolean,
+                      # assuming it's applicable based on previous discussions.
+                      cv = project.custom_value_for(needs_posting_today_project_cf)
+                      if cv.nil?
+                        cv = CustomValue.new(custom_field: needs_posting_today_project_cf, customized: project)
+                      end
+                      
+                      # Convert boolean to '1' (true) or '0' (false) for saving
+                      value_to_save = needs_posting_today ? '1' : '0'
+
+                      if cv.value.to_s != value_to_save
+                        cv.value = value_to_save
+                        if cv.save
+                          Rails.logger.info "[RSP] Project ##{project.id}: Updated '#{needs_posting_today_project_cf.name}' to #{needs_posting_today}."
+                        else
+                          Rails.logger.error "[RSP] Project ##{project.id}: Failed to save '#{needs_posting_today_project_cf.name}'. Errors: #{cv.errors.full_messages.join(', ')}."
+                        end
+                      end
+                    else
+                      Rails.logger.warn "[RSP] Project ##{project.id}: 'Hôm nay cần đăng bài' CF (ID: #{needs_posting_today_cf_id}) is not a boolean type."
+                    end
+                  else
+                    Rails.logger.warn "[RSP] Project ##{project.id}: 'Hôm nay cần đăng bài' Project CF (ID: #{needs_posting_today_cf_id}) not found."
+                  end
+                rescue StandardError => e
+                  Rails.logger.error "[RSP] Project ##{project.id}: Error calculating or updating 'Hôm nay cần đăng bài': #{e.message}\n#{e.backtrace.join("\n")}"
+                end
+                # END - New logic for "Hôm nay cần đăng bài"
               else
                 Rails.logger.info "[RSP] Project ##{project.id}: No Social Plan issue (Tracker ID: #{social_plan_tracker_id}) found. Written posts count set to 0."
               end

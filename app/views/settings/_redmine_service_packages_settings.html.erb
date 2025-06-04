@@ -3,9 +3,15 @@
 
 <% 
   # Fetch all project custom fields that are of type 'list' for service package name AND progress status
-  list_type_custom_fields = ProjectCustomField.where(field_format: 'list').order(:name).map { |cf| [cf.name, cf.id] }
+  project_list_type_custom_fields = ProjectCustomField.where(field_format: 'list').order(:name).map { |cf| [cf.name, cf.id] }
   # Fetch all project custom fields that are of type 'int' for service package posts count AND for written posts count
-  int_type_custom_fields = ProjectCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
+  project_int_type_custom_fields = ProjectCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
+  # Fetch all project custom fields that are of type 'bool' for 'Needs Posting Today'
+  project_bool_type_custom_fields = ProjectCustomField.where(field_format: 'bool').order(:name).map { |cf| [cf.name, cf.id] }
+  
+  # Fetch all issue custom fields that are of type 'int' for 'Posting Frequency' on Social Plan issues
+  issue_int_type_custom_fields = IssueCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
+
   # Fetch all trackers
   trackers = Tracker.order(:name).map { |t| [t.name, t.id] }
 %>
@@ -14,7 +20,7 @@
   <label for="settings_service_package_name_cf_id"><%= l(:label_setting_service_package_name_cf) %></label>
   <%= select_tag(
         'settings[service_package_name_cf_id]',
-        options_for_select(list_type_custom_fields, @settings['service_package_name_cf_id']&.to_i),
+        options_for_select(project_list_type_custom_fields, @settings['service_package_name_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -26,7 +32,7 @@
   <label for="settings_service_package_posts_cf_id"><%= l(:label_setting_service_package_posts_cf) %></label>
   <%= select_tag(
         'settings[service_package_posts_cf_id]',
-        options_for_select(int_type_custom_fields, @settings['service_package_posts_cf_id']&.to_i),
+        options_for_select(project_int_type_custom_fields, @settings['service_package_posts_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -38,7 +44,7 @@
   <label for="settings_written_posts_cf_id"><%= l(:label_setting_written_posts_cf) %></label>
   <%= select_tag(
         'settings[written_posts_cf_id]',
-        options_for_select(int_type_custom_fields, @settings['written_posts_cf_id']&.to_i),
+        options_for_select(project_int_type_custom_fields, @settings['written_posts_cf_id']&.to_i),
         include_blank: true
       ) 
   %>
@@ -74,7 +80,7 @@
   <label for="settings_progress_status_cf_id"><%= l(:label_setting_progress_status_cf) %></label>
   <%= select_tag(
         'settings[progress_status_cf_id]',
-        options_for_select(list_type_custom_fields, @settings['progress_status_cf_id']&.to_i),
+        options_for_select(project_list_type_custom_fields, @settings['progress_status_cf_id']&.to_i),
         include_blank: true 
       ) 
   %>
@@ -88,6 +94,36 @@
   <br>
   <em><%= textilizable(l(:label_setting_progress_calculation_rules_desc)) %></em>
 </p>
+
+<%# START New settings for Posting Frequency and Needs Posting Today %>
+<fieldset>
+  <legend><%= l(:label_posting_schedule_settings) %></legend> <%# You'll need to add this label too: "Cài đặt Lịch Đăng Bài" %>
+
+  <p>
+    <label for="settings_posting_frequency_cf_id"><%= l(:label_setting_posting_frequency_cf_id) %></label>
+    <%= select_tag(
+          'settings[posting_frequency_cf_id]',
+          options_for_select(issue_int_type_custom_fields, @settings['posting_frequency_cf_id']&.to_i),
+          include_blank: true
+        ) 
+    %>
+    <br>
+    <em><%= l(:label_setting_posting_frequency_cf_id_desc) %></em>
+  </p>
+
+  <p>
+    <label for="settings_needs_posting_today_cf_id"><%= l(:label_setting_needs_posting_today_cf_id) %></label>
+    <%= select_tag(
+          'settings[needs_posting_today_cf_id]',
+          options_for_select(project_bool_type_custom_fields, @settings['needs_posting_today_cf_id']&.to_i),
+          include_blank: true
+        ) 
+    %>
+    <br>
+    <em><%= l(:label_setting_needs_posting_today_cf_id_desc) %></em>
+  </p>
+</fieldset>
+<%# END New settings %>
 
 <p>
   <strong><%= l(:label_important_note) %>:</strong>
