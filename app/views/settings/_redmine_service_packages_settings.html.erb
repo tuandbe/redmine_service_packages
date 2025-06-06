@@ -12,6 +12,9 @@
   # Fetch all issue custom fields that are of type 'int' for 'Posting Frequency' on Social Plan issues
   issue_int_type_custom_fields = IssueCustomField.where(field_format: 'int').order(:name).map { |cf| [cf.name, cf.id] }
 
+  # Fetch all issue custom fields that are of type 'date' for 'Posting Date'
+  issue_date_type_custom_fields = IssueCustomField.where(field_format: 'date').order(:name).map { |cf| [cf.name, cf.id] }
+
   # Fetch all trackers
   trackers = Tracker.order(:name).map { |t| [t.name, t.id] }
 %>
@@ -109,6 +112,18 @@
     %>
     <br>
     <em><%= l(:label_setting_posting_frequency_cf_id_desc) %></em>
+  </p>
+
+  <p>
+    <label for="settings_posting_date_cf_id"><%= l(:label_setting_posting_date_cf_id) %></label>
+    <%= select_tag(
+          'settings[posting_date_cf_id]',
+          options_for_select(issue_date_type_custom_fields, @settings['posting_date_cf_id']&.to_i),
+          include_blank: true
+        ) 
+    %>
+    <br>
+    <em><%= l(:label_setting_posting_date_cf_id_desc) %></em>
   </p>
 
   <p>

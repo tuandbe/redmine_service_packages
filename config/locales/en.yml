@@ -67,9 +67,11 @@ en:
 
   # Translations for Posting Schedule Settings - Added based on user request
   label_posting_schedule_settings: "Posting Schedule Settings"
-  label_setting_posting_frequency_cf_id: "Posting Frequency CF ID (on Social Plan Issue)"
-  label_setting_posting_frequency_cf_id_desc: "Select the custom field (integer type) on *Issue* used to store the posting frequency (e.g., 2 for every 2 days). This field belongs to the Social Plan issue."
-  label_setting_needs_posting_today_cf_id: "'Needs Posting Today' CF ID (on Project)"
-  label_setting_needs_posting_today_cf_id_desc: "Select the custom field (boolean type) on *Project* to store whether a post is needed today."
+  label_setting_posting_frequency_cf_id: "Posting Frequency CF ID"
+  label_setting_posting_frequency_cf_id_desc: "The custom field (integer type) on 'Social Plan' issues to determine posting frequency (e.g., 7 = every 7 days)."
+  label_setting_needs_posting_today_cf_id: "'Needs Posting Today' CF ID"
+  label_setting_needs_posting_today_cf_id_desc: "The custom field (boolean type) on 'Project' to flag if a post is needed today."
+  label_setting_posting_date_cf_id: "Posting Date CF ID"
+  label_setting_posting_date_cf_id_desc: "The custom field (date type) on 'Issue' to record the actual posting date."
 
   # ... rest of the file remains unchanged ...

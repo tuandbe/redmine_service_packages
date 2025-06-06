@@ -54,17 +54,20 @@ module RedmineServicePackages
                   # Get CF IDs from plugin settings
                   posting_frequency_cf_id_setting = Setting.plugin_redmine_service_packages['posting_frequency_cf_id']
                   needs_posting_today_cf_id_setting = Setting.plugin_redmine_service_packages['needs_posting_today_cf_id']
+                  posting_date_cf_id_setting = Setting.plugin_redmine_service_packages['posting_date_cf_id']
 
-                  unless posting_frequency_cf_id_setting.present? && needs_posting_today_cf_id_setting.present?
+                  unless posting_frequency_cf_id_setting.present? && needs_posting_today_cf_id_setting.present? && posting_date_cf_id_setting.present?
                     missing_settings = []
                     missing_settings << "'ID Trường Tần Suất Đăng Bài'" unless posting_frequency_cf_id_setting.present?
+                    missing_settings << "'ID Trường Ngày Đăng'" unless posting_date_cf_id_setting.present?
                     missing_settings << "'ID Trường Hôm Nay Cần Đăng Bài'" unless needs_posting_today_cf_id_setting.present?
                     Rails.logger.warn "[RSP] Project ##{project.id}: Các cài đặt plugin sau chưa được cấu hình: #{missing_settings.join(', ')}. Bỏ qua tính toán lịch đăng bài."
-                    return # Return from the begin block or use next if in a loop suitable for it
+                    return
                   end
 
                   posting_frequency_cf_id = posting_frequency_cf_id_setting.to_i
                   needs_posting_today_cf_id = needs_posting_today_cf_id_setting.to_i
+                  posting_date_cf_id = posting_date_cf_id_setting.to_i
 
                   # Get "Tần suất đăng bài" value from latest_social_plan_issue
                   posting_frequency_cf = CustomField.find_by(id: posting_frequency_cf_id)
@@ -78,8 +81,7 @@ module RedmineServicePackages
                       # New logic starts here per user request.
                       # It calculates the need to post based on the last actual post date, not the plan's start date.
                       
-                      # ID for 'Ngày đăng' custom field, as specified in the request.
-                      posting_date_cf_id = 13 
+                      # ID for 'Ngày đăng' custom field is now read from settings.
                       
                       # Find the latest issue with the specified tracker ('Viết bài') that has a posting date.
                       # The 'tracker' variable is available from the parent scope.
