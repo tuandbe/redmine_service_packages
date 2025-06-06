@@ -70,18 +70,47 @@ module RedmineServicePackages
                   posting_frequency_cf = CustomField.find_by(id: posting_frequency_cf_id)
                   posting_frequency_value = latest_social_plan_issue.custom_value_for(posting_frequency_cf)&.value
 
-                  # Get start_date from latest_social_plan_issue
-                  plan_start_date = latest_social_plan_issue.start_date
-
                   needs_posting_today = false # Default to false
 
-                  if posting_frequency_cf && posting_frequency_value.present? && plan_start_date.present?
+                  if posting_frequency_cf && posting_frequency_value.present?
                     frequency = posting_frequency_value.to_i
                     if frequency > 0
-                      today = Date.today
-                      if today >= plan_start_date
-                        days_diff = (today - plan_start_date).to_i
-                        needs_posting_today = (days_diff % frequency == 0)
+                      # New logic starts here per user request.
+                      # It calculates the need to post based on the last actual post date, not the plan's start date.
+                      
+                      # ID for 'Ngày đăng' custom field, as specified in the request.
+                      posting_date_cf_id = 13 
+                      
+                      # Find the latest issue with the specified tracker ('Viết bài') that has a posting date.
+                      # The 'tracker' variable is available from the parent scope.
+                      latest_post_cv = CustomValue
+                        .joins("INNER JOIN issues ON issues.id = custom_values.customized_id AND custom_values.customized_type = 'Issue'")
+                        .where(issues: { project_id: project.id, tracker_id: tracker.id })
+                        .where(custom_field_id: posting_date_cf_id)
+                        .where.not(value: [nil, ''])
+                        .order(Arel.sql("CAST(value AS date) DESC"))
+                        .first
+
+                      if latest_post_cv.nil?
+                        # Case 1: No previous post found. This means a post is needed.
+                        needs_posting_today = true
+                        Rails.logger.info "[RSP] Project ##{project.id}: No previous post with a 'Ngày đăng' date found. Setting 'needs_posting_today' to true."
+                      else
+                        # Case 2: A previous post was found. Calculate based on its date.
+                        begin
+                          latest_post_date = Date.parse(latest_post_cv.value)
+                          today = Date.today
+                          if today == latest_post_date
+                            # A post was already made today, so no need to post again.
+                            needs_posting_today = false
+                          elsif today > latest_post_date
+                            days_diff = (today - latest_post_date).to_i
+                            # The original formula from the user request.
+                            needs_posting_today = (days_diff % frequency == 0)
+                          end
+                        rescue Date::Error
+                          Rails.logger.warn "[RSP] Project ##{project.id}: Invalid date format in 'Ngày đăng' CF (ID: #{posting_date_cf_id}) for CV ##{latest_post_cv.id}. Value: '#{latest_post_cv.value}'"
+                        end
                       end
                     else
                       Rails.logger.info "[RSP] Project ##{project.id}: 'Tần suất đăng bài' (ID: #{posting_frequency_cf_id}) is zero or invalid for Social Plan ##{latest_social_plan_issue.id}."
@@ -90,7 +119,6 @@ module RedmineServicePackages
                     missing_data = []
                     missing_data << "'Tần suất đăng bài' CF (ID: #{posting_frequency_cf_id}) not found" unless posting_frequency_cf
                     missing_data << "'Tần suất đăng bài' value not present" if posting_frequency_value.blank?
-                    missing_data << "'start_date' not present" if plan_start_date.blank?
                     Rails.logger.info "[RSP] Project ##{project.id}: Cannot calculate 'Hôm nay cần đăng bài'. Missing data for Social Plan ##{latest_social_plan_issue.id}: #{missing_data.join(', ')}."
                   end
 
