@@ -107,8 +107,13 @@ module RedmineServicePackages
                             needs_posting_today = false
                           elsif today > latest_post_date
                             days_diff = (today - latest_post_date).to_i
-                            # The original formula from the user request.
-                            needs_posting_today = (days_diff % frequency == 0)
+                            # New logic: a post is needed if it is overdue (days_diff > frequency)
+                            # or if it's exactly on schedule.
+                            if days_diff > frequency
+                              needs_posting_today = true
+                            else
+                              needs_posting_today = (days_diff % frequency == 0)
+                            end
                           end
                         rescue Date::Error
                           Rails.logger.warn "[RSP] Project ##{project.id}: Invalid date format in 'Ngày đăng' CF (ID: #{posting_date_cf_id}) for CV ##{latest_post_cv.id}. Value: '#{latest_post_cv.value}'"
