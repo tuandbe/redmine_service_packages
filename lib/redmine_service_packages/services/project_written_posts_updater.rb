@@ -8,12 +8,12 @@ module RedmineServicePackages
     # 2. Determining if a post is needed today based on frequency.
     # 3. Calculating and updating the project's progress status.
     class ProjectWrittenPostsUpdater
-      DEFAULT_PROGRESS_RULES = <<~RULES.strip
-        -1000..-1: "Quá hạn"
-        0: "Hoàn thành"
-        1..2: "Sắp hoàn thành"
-        3..1000: "Đang thực hiện"
-      RULES
+      DEFAULT_PROGRESS_RULES = [
+        "lt(0):Quá hạn mức",
+        "eq(0):Hoàn thành",
+        "between(1,2):Sắp đủ bài",
+        "gt(2):Đang chạy"
+      ].join("\n")
 
       # Main entry point. Orchestrates the updates for a given project.
       # @param project [Project] The project to update.
@@ -183,14 +183,21 @@ module RedmineServicePackages
             return
           end
 
-          if field_type == 'list' && !custom_field.possible_values_options.map(&:first).include?(new_value.to_s)
+          if field_type == 'list' && !custom_field.possible_values_options.include?(new_value.to_s)
             Rails.logger.warn "[RSP] Determined progress string '#{new_value}' not valid for CF '#{custom_field.name}'. Project ##{customizable.id}."
-              return
-            end
+            Rails.logger.warn "[RSP] Available values: #{custom_field.possible_values_options.inspect}"
+            return
+          end
 
           cv = customizable.custom_value_for(custom_field)
           if cv.nil?
-            return unless custom_field.is_for_all? || custom_field.projects.include?(customizable)
+            # If the custom field is not applicable to this project, custom_value_for returns nil.
+            # We try to create a new CustomValue only if the field is configured for all projects
+            # or if it's specifically configured for this project.
+            unless custom_field.is_for_all?
+              Rails.logger.warn "[RSP] Project ##{customizable.id}: #{cf_name_for_logs} CF '#{custom_field.name}' is not configured for this project."
+              return
+            end
 
             cv = CustomValue.new(custom_field: custom_field, customized: customizable)
           end
@@ -207,32 +214,43 @@ module RedmineServicePackages
           end
 
         # Applies the configured rules to determine the progress status string.
-        # (This method remains from the original code)
+        # (This method handles the original format with lt(), eq(), between(), gt() functions)
         # @param difference [Integer] The difference between total posts and written posts.
         # @param rules_string [String] The rule configuration.
         # @param project [Project]
         # @return [String|nil] The calculated progress status string.
         def apply_progress_rules(difference, rules_string, project)
-        rules_string.each_line do |line|
-          line.strip!
-          next if line.blank? || line.start_with?('#')
+          rules_string.each_line do |line|
+            line.strip!
+            next if line.blank? || line.start_with?('#')
 
-            parts = line.split(':')
-            next unless parts.length == 2
+            condition_part, outcome_string = line.split(':', 2)
+            next unless condition_part && outcome_string
+            
+            condition_part.strip!
+            outcome_string.strip!
 
-            range_str = parts[0].strip
-            value_str = parts[1].strip.gsub('"', '')
-
-            begin
-              range_parts = range_str.split('..').map(&:to_i)
-              range = (range_parts[0]..range_parts[1])
-              return value_str if range.cover?(difference)
-            rescue StandardError => e
-              Rails.logger.error "[RSP] Invalid rule format: '#{line}' for project ##{project.id}. Error: #{e.message}"
+            matched = false
+            case condition_part
+            when /\Aeq\((-?\d+)\)\z/
+              matched = difference == $1.to_i
+            when /\Alt\((-?\d+)\)\z/
+              matched = difference < $1.to_i
+            when /\Agt\((-?\d+)\)\z/
+              matched = difference > $1.to_i
+            when /\Abetween\((-?\d+),(-?\d+)\)\z/
+              num1 = $1.to_i
+              num2 = $2.to_i
+              matched = difference >= [num1, num2].min && difference <= [num1, num2].max
+            else
+              Rails.logger.warn "[RSP] Invalid rule condition format: '#{condition_part}' for project ##{project.id}. Rule skipped."
+              next 
             end
+
+            return outcome_string if matched
+          end
+          nil
         end
-        nil 
-      end
       end
     end
   end
